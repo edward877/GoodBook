@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registration</title>
+    <link rel="stylesheet" th:href="@{/css/materialize.css}" href="../../css/materialize.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" th:href="@{/css/footer.css}" href="../../css/footer.css" />
+
+
+</head>
+<body>
+
+<header th:include="fragments/header :: header"></header>
+
+
+<main class="valign-wrapper">
+    <div class="container ">
+        <div class='row center'>
+            <div class=" col l4 s12  offset-l4">
+                <h5 class="grey-text">Registration</h5>
+                <br />
+                <div class="z-depth-1 grey lighten-4" style="display: inline-block; padding:  0px 48px; border: 1px solid #EEE;">
+
+                    <form class="col s12" method="post" th:action="@{/registration}">
+                        <div class='input-field col s12 '>
+                            <input class='validate' type='text' name='username' id='username' />
+                            <label>Username</label>
+                        </div>
+                        <div class='input-field col s12'>
+                            <input class='validate' type='password' name='password' id='password' />
+                            <label for='password'>Password</label>
+                        </div>
+                        <div class='input-field col s12'>
+                            <input class='validate' type='text' name='fio' id='fio' />
+                            <label for='fio'>Fio</label>
+                        </div>
+                        <div class='input-field col s12'>
+                            <input class='validate' type='text' name='email' id='email' />
+                            <label for='email'>Email</label>
+                        </div>
+                        <div class='input-field col s12'>
+                            <input class='validate' type='text' name='phoneNumber' id='phoneNumber' />
+                            <label for='phoneNumber'>Phone number</label>
+                        </div>
+                        <div class='row center'>
+                            <button type='submit' name='btn_registration' class='col s12 btn btn-large waves-effect grey'>Registration</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:include="fragments/footer :: footer"></footer>
+
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/js/materialize.js}" src="../../js/materialize.js"></script>
+</body>
+</html>

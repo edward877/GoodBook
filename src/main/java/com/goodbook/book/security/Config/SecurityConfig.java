@@ -16,41 +16,42 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
     @Qualifier("userDetailsServiceImpl")
-    @Autowired
-    UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());;
-    }
-
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/css/**","/fonts/**","/js/**").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin()
-//                .loginPage("/login")
-//                .permitAll()
-//                .and()
-//                .logout()
-//                .permitAll();
-//        http.csrf().disable();
-//    }
-
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-//        manager.createUser(User.withUsername("user").password("password").roles("USER").build());
-//        return manager;
-//    }
+    private PasswordEncoder passwordEncoder;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder;
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);;
+    }
+
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf()
+                    .disable()
+                .authorizeRequests()
+                    .antMatchers("/css/**","/fonts/**","/js/**", "/images/**").permitAll()
+                    .antMatchers("/registration").permitAll()
+                    .anyRequest().authenticated()
+                .and()
+                    .formLogin()
+                    .loginPage("/login")
+                    .permitAll()
+                .and()
+                    .logout()
+                    .logoutUrl("/logout")
+//                    .logoutSuccessUrl("/")
+                    .permitAll()
+                .and()
+                    .httpBasic();
     }
 }

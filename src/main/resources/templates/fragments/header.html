@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<header>
+    <nav class="grey">
+        <div class="nav-wrapper">
+            <a class="brand-logo center" th:href="@{/}">
+                <img id="cupcake" class="responsive-img" width="62" th:src="@{/images/cupcake.png}"/>
+            </a>
+            <ul id="name" class="left col 2">
+                <li>[[${#httpServletRequest.remoteUser}]]</li>
+            </ul>
+            <ul id="nav-mobile" class="right">
+                <li th:if="${#httpServletRequest.remoteUser}">
+                    <form th:action="@{/logout}" method="get">
+                        <input type="submit" value="Выйти" class="btn-large btn-flat white-text" />
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+</body>
+</html>
