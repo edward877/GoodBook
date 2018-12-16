@@ -32,15 +32,15 @@ public class OrderDto implements Serializable {
     String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
-    CustomerDto customer;
+    @JoinColumn(name = "username", nullable = false)
+    UserDto user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     List<OrderBookDto> orderBooks;
 
-    public OrderDto(double sum, String status, CustomerDto customer) {
+    public OrderDto(double sum, String status, UserDto  user) {
         this.sum = sum;
         this.status = status;
-        this.customer = customer;
+        this.user = user;
     }
 }

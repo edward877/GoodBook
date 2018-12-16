@@ -15,7 +15,6 @@ public class IndexController {
 
     public ModelAndView index(Authentication authentication) {
         Map model = new HashMap<String, String>();
-//        model.put("test",  10);
         ModelAndView modelAndView = new ModelAndView("index", model);
         return modelAndView;
     }

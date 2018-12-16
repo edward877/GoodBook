@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface BookDao extends CrudRepository<BookDto, Integer>, PagingAndSortingRepository<BookDto, Integer> {
 
+    //   @Query("select article from Article article left join fetch article.topics where article.id =:id")
     List<BookDto> findAll();
 }

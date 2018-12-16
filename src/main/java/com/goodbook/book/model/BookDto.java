@@ -12,7 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "books")
 @NoArgsConstructor
-@ToString(exclude = {"orderBooks", "comments"})
 @FieldDefaults(level= AccessLevel.PRIVATE)
 public class BookDto implements Serializable {
 
@@ -46,10 +45,14 @@ public class BookDto implements Serializable {
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude @ToString.Exclude
+    @Getter(AccessLevel.PRIVATE)
     List<CommentDto> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude @ToString.Exclude
+    @Getter(AccessLevel.PRIVATE)
     List<OrderBookDto> orderBooks = new ArrayList<>();
 
     public BookDto(String name, String author, int year, String description, double price, String urlImage, int count) {

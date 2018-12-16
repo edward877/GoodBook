@@ -9,7 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -18,16 +20,27 @@ public class BookServiceImpl implements BookService {
     @Autowired
     BookDao bookDao;
 
-    private static final int countInPage = 1;
-
     @Override
-    public BookDto findOneById(int id) throws NullPointerException {
-        return bookDao.findById(id).orElseThrow(() -> new NullPointerException("Book not found"));
+    public Map<String, Object> findOneById(int id) throws NullPointerException {
+        Map<String, Object> map = new HashMap<>(1);
+        BookDto book = bookDao.findById(id).get();
+        if (book != null){
+            map.put("Book", book);
+        } else {
+            map.put("Error", "Book not found");
+        }
+        return map;
     }
 
     @Override
-    public BookDto addBook(BookDto bookDto) {
-        return bookDao.save(bookDto);
+    public Map<String, Object> addBook(BookDto bookDto) {
+        Map<String, Object> map = new HashMap<>(1);
+        if (bookDao.save(bookDto) != null) {
+            map.put("ok", true);
+        } else {
+            map.put("error", "Imposible save book");
+        }
+        return map;
     }
 
     @Override
@@ -41,14 +54,37 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> findAllBook(int page) {
-        //TODO изменить Sort на новую версию, и вынести Sort.Order параметры в getter, чтобы можно было сортировать разными способами
-        @Deprecated
-        Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "id"));
-        Pageable pageable = new PageRequest(page-1, countInPage, sort);
-        return bookDao.findAll(pageable).getContent();
+    public Map<String, Object> findAllBook(int page, int countInPage, String direction, String property) {
+        Map<String, Object> map = new HashMap<>(4);
+
+        if (countInPage > 50) {
+            countInPage = 50;
+        } else  if (countInPage < 0) {
+            countInPage = 1;
+        }
+
+        int maxBookPage = (int)Math.ceil((double)bookDao.findAll().size()/countInPage);
+
+        if (page > maxBookPage) {
+            page = maxBookPage;
+        } else  if (page < 1) {
+            page = 1;
+        }
+
+        Sort sort =  Sort.by(Sort.Direction.fromString(direction), property);
+        Pageable pageable = PageRequest.of(page-1, countInPage, sort);
+
+        List<BookDto> books = bookDao.findAll(pageable).getContent();
+        if (books != null) {
+            map.put("MaxPage", maxBookPage);
+            map.put("Books", books);
+            map.put("Count", books.size());
+            map.put("Page", page);
+        } else {
+            map.put("Error", "Книги не найдены");
+        }
+
+        return  map;
     }
-
-
 
 }

@@ -16,7 +16,6 @@ import java.util.List;
 @Table(name = "users")
 @NoArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE)
-@ToString(exclude = {"comments"})
 public class UserDto implements Serializable {
 
     private static final long serialVersionUID = -7911677343698774614L;
@@ -34,13 +33,14 @@ public class UserDto implements Serializable {
     @Column(name = "role", nullable = false, length = 40)
     String role;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
-    CustomerDto customer;
-
+    @EqualsAndHashCode.Exclude @ToString.Exclude
+    @Getter(AccessLevel.PRIVATE)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     List<CommentDto> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    List<OrderDto> orders;
 
     public UserDto(String username, String password, String role) {
         this.username = username;

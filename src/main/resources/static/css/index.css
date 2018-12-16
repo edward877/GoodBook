@@ -1,0 +1,31 @@
+main {
+    flex: 1 0 auto;
+}
+.room {
+    margin-top: 7%;
+    display: inline-block;
+    border: solid grey 2px;
+    margin-right: 10px;
+    /*width: 25%;*/
+    /*margin-right: 10%;*/
+}
+
+.room .body{
+    text-align: center;
+    font-size: 20px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.room .title{
+    text-align: center;
+    font-size: 25px;
+    border-bottom: solid grey 1px ;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+a{
+    color: black;
+}
+
+
