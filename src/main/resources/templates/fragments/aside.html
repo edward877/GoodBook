@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<aside th:fragment="aside">
+    <div class="collection left col 5"
+         th:each="bookCategory : ${com.goodbook.book.service.impl()}">
+        <a href="#!" class="collection-item" th:text="${bookCategory}"></a>
+    </div>
+</aside>
+</body>
+</html>

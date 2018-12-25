@@ -16,8 +16,6 @@ public interface BookService {
 
     BookDto deleteBook(int id);
 
-    BookDto updateBook(BookDto bookDto);
-
     Map<String, Object> findAllBook(int page, int countInPage, String direction, String property);
 
 }

@@ -46,8 +46,10 @@ public class BookController {
         return bookService.addBook(bookDto);
     }
 
-    @GetMapping("find")
-    public Map findBooksByProperty(String property, String words){
-        return null;
+    @PostMapping("/book/{bookId}")
+    public Map bookUpdate(@PathVariable("bookId") String bookId, @ModelAttribute BookDto bookDto) {
+        bookDto.setId(Integer.parseInt(bookId));
+        return bookService.addBook(bookDto);
     }
+
 }

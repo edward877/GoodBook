@@ -2,6 +2,7 @@ package com.goodbook.book.service.impl;
 
 import com.goodbook.book.dao.BookDao;
 import com.goodbook.book.model.BookDto;
+import com.goodbook.book.model.Enum.BookCategory;
 import com.goodbook.book.service.interfaces.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -49,11 +50,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto updateBook(BookDto bookDto) {
-        return null;
-    }
-
-    @Override
     public Map<String, Object> findAllBook(int page, int countInPage, String direction, String property) {
         Map<String, Object> map = new HashMap<>(4);
 
@@ -80,11 +76,16 @@ public class BookServiceImpl implements BookService {
             map.put("Books", books);
             map.put("Count", books.size());
             map.put("Page", page);
+            map.put("BookCategories", BookCategory.values());
         } else {
             map.put("Error", "Книги не найдены");
         }
 
         return  map;
     }
+//
+//    public static BookCategory[] getBooksCategoty() {
+//        return ;
+//    }
 
 }

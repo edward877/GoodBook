@@ -34,13 +34,16 @@ public class UserDto implements Serializable {
     String role;
 
     @EqualsAndHashCode.Exclude @ToString.Exclude
-    @Getter(AccessLevel.PRIVATE)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     List<CommentDto> comments = new ArrayList<>();
 
+    @EqualsAndHashCode.Exclude @ToString.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     List<OrderDto> orders;
+
+    @EqualsAndHashCode.Exclude @ToString.Exclude
+    transient CardDto card = new CardDto();
 
     public UserDto(String username, String password, String role) {
         this.username = username;
