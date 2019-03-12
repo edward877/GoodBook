@@ -5,6 +5,7 @@ import com.goodbook.book.model.BookDto;
 import com.goodbook.book.model.Enum.BookCategory;
 import com.goodbook.book.service.interfaces.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @Service
@@ -24,9 +26,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public Map<String, Object> findOneById(int id) throws NullPointerException {
         Map<String, Object> map = new HashMap<>(1);
-        BookDto book = bookDao.findById(id).get();
-        if (book != null){
-            map.put("Book", book);
+        Optional<BookDto> book = bookDao.findById(id);
+        if (book.isPresent()){
+            map.put("Book", book.get());
+            map.put("Comments", book.get()._getComents());
         } else {
             map.put("Error", "Book not found");
         }
@@ -37,7 +40,7 @@ public class BookServiceImpl implements BookService {
     public Map<String, Object> addBook(BookDto bookDto) {
         Map<String, Object> map = new HashMap<>(1);
         if (bookDao.save(bookDto) != null) {
-            map.put("ok", true);
+            map.put("success", true);
         } else {
             map.put("error", "Imposible save book");
         }
@@ -55,37 +58,32 @@ public class BookServiceImpl implements BookService {
 
         if (countInPage > 50) {
             countInPage = 50;
-        } else  if (countInPage < 0) {
+        } else  if (countInPage < 1) {
             countInPage = 1;
         }
 
-        int maxBookPage = (int)Math.ceil((double)bookDao.findAll().size()/countInPage);
-
-        if (page > maxBookPage) {
-            page = maxBookPage;
-        } else  if (page < 1) {
+        if (page < 1) {
             page = 1;
         }
 
         Sort sort =  Sort.by(Sort.Direction.fromString(direction), property);
         Pageable pageable = PageRequest.of(page-1, countInPage, sort);
 
-        List<BookDto> books = bookDao.findAll(pageable).getContent();
+        Page pageList =  bookDao.findAll(pageable);
+        List<BookDto> books = pageList.getContent();
+        int maxBookPage = pageList.getTotalPages();
+
+
         if (books != null) {
             map.put("MaxPage", maxBookPage);
             map.put("Books", books);
             map.put("Count", books.size());
             map.put("Page", page);
-            map.put("BookCategories", BookCategory.values());
         } else {
             map.put("Error", "Книги не найдены");
         }
 
         return  map;
     }
-//
-//    public static BookCategory[] getBooksCategoty() {
-//        return ;
-//    }
 
 }

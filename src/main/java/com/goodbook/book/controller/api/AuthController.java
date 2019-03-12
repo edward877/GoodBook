@@ -10,27 +10,42 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-//@RestController
-//@RequestMapping(value = "/api/")
-@Controller
+@RestController
+@RequestMapping(value = "/api/")
+//@Controller
 public class AuthController {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public AuthController(UserService userService) {
+        this.userService = userService;
+    }
 
-    @GetMapping("/registration")
-    public void registration(){ }
-
-    @PostMapping("/registration")
+    @PostMapping("registration")
     public Map registration(@ModelAttribute UserDto userDto) {
         Map<String, Object> map = new HashMap<>();
         try{
-            userDto.setRole(UserRole.ROLE_USER.name());
+            userDto.setRole(UserRole.ROLE_USER);
             userService.registration(userDto);
             map.put("User",userDto);
         }catch (Exception ex) {
             map.put("Error", ex.getMessage());
         }
+        return map;
+    }
+
+    @PostMapping("login/success")
+    public Map loginSuccess() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", true);
+        return map;
+    }
+
+    @PostMapping("login/failure")
+    public Map loginFailure() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", false);
         return map;
     }
 }

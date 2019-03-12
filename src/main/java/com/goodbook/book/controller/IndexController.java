@@ -10,12 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value={"", "/"})
+@RequestMapping(value={"", "/", "index/"})
 public class IndexController {
 
     public ModelAndView index(Authentication authentication) {
         Map model = new HashMap<String, String>();
-        ModelAndView modelAndView = new ModelAndView("index", model);
-        return modelAndView;
+        return  new ModelAndView("index", model);
     }
 }

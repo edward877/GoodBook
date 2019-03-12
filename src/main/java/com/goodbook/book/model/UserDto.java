@@ -1,10 +1,12 @@
 package com.goodbook.book.model;
 
+import com.goodbook.book.model.Enum.UserRole;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -22,32 +24,35 @@ public class UserDto implements Serializable {
 
     @NotBlank
     @Id
-    @Column(name = "username", nullable = false, length = 40)
-    String username;
+    @Column(name = "email", nullable = false, length = 40)
+    @Email
+    String email;
 
     @NotBlank
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "password", nullable = false)
+    @Getter(AccessLevel.PRIVATE)
     String password;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, length = 40)
-    String role;
+    UserRole role;
 
     @EqualsAndHashCode.Exclude @ToString.Exclude
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Getter(AccessLevel.PRIVATE)
     List<CommentDto> comments = new ArrayList<>();
 
     @EqualsAndHashCode.Exclude @ToString.Exclude
+    @Getter(AccessLevel.PRIVATE)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     List<OrderDto> orders;
 
     @EqualsAndHashCode.Exclude @ToString.Exclude
+    @Getter(AccessLevel.PRIVATE)
     transient CardDto card = new CardDto();
 
-    public UserDto(String username, String password, String role) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
+    public String getSecretPassword() {
+        return password;
     }
 }

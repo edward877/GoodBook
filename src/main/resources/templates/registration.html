@@ -21,7 +21,7 @@
                 <h5 th:text="${Error}"/>
             </div>
             <div th:if="${User}">
-                <h5 th:text="${User.getusername} is registred. Please log in"/>
+                <h5 th:text="${User.getEmail} is registred. Please log in"/>
             </div>
             <div class=" col l4 s12  offset-l4">
                 <h5 class="grey-text">Registration</h5>
@@ -30,7 +30,7 @@
 
                     <form class="col s12" method="post" th:action="@{/registration}">
                         <div class='input-field col s12 '>
-                            <input class='validate' type='text' name='username' id='username' />
+                            <input class='validate' type='text' name='username' id='email' />
                             <label>Username</label>
                         </div>
                         <div class='input-field col s12'>

@@ -1,5 +1,6 @@
 package com.goodbook.book.model;
 
+import com.goodbook.book.model.Enum.BookCategory;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -43,6 +44,10 @@ public class BookDto implements Serializable {
     @Column(name = "count", nullable = false)
     int count;
 
+    @Column(name = "category", nullable = false)
+    @Enumerated(EnumType.STRING)
+    BookCategory category;
+
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude @ToString.Exclude
@@ -55,13 +60,7 @@ public class BookDto implements Serializable {
     @Getter(AccessLevel.PRIVATE)
     List<OrderBookDto> orderBooks = new ArrayList<>();
 
-    public BookDto(String name, String author, int year, String description, double price, String urlImage, int count) {
-        this.name = name;
-        this.author = author;
-        this.year = year;
-        this.description = description;
-        this.price = price;
-        this.urlImage = urlImage;
-        this.count = count;
+    public List<CommentDto> _getComents() {
+        return getComments();
     }
 }

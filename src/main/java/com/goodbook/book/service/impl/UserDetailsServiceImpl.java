@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -21,14 +22,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserDto userDto = userDao.findByUsername(username);
-        if (userDto == null){
+        Optional<UserDto> userDto = userDao.findByEmail(username);
+        if (!userDto.isPresent()){
             throw new UsernameNotFoundException("User Name "+ username +"Not Found");
         }
+
         UserDetails user = new User(
-                userDto.getUsername(),
-                userDto.getPassword(),
-                getAuthorities(UserRole.valueOf(userDto.getRole())));
+                userDto.get().getEmail(),
+                userDto.get().getSecretPassword(),
+                getAuthorities(userDto.get().getRole()));
         return user;
     }
 

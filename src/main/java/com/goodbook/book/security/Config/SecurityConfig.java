@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -40,17 +41,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .disable()
                 .authorizeRequests()
                     .antMatchers("/css/**","/fonts/**","/js/**", "/images/**").permitAll()
-                    .antMatchers("/api/registration", "/registration").permitAll()
-                    .antMatchers("/login").anonymous()
-                    .anyRequest().authenticated()
+                    .antMatchers("/api/registration", "/registration").anonymous()
+                    .antMatchers("/api/login/**", "/login").anonymous()
+                    .antMatchers("/api/**/admin/**").hasRole("ADMIN")
+                    .antMatchers("/api/**/user/**").hasRole("USER")
+//                    .anyRequest().authenticated()
                 .and()
                     .formLogin()
                     .loginPage("/login")
+                    .usernameParameter("email")
+                    .failureForwardUrl("/api/login/failure")
+                    .successForwardUrl("/api/login/success")
                     .permitAll()
                 .and()
                     .logout()
-                    .logoutUrl("/logout")
-//                    .logoutSuccessUrl("/")
+//                    .logoutUrl("/logout")
                     .permitAll()
                 .and()
                     .httpBasic();

@@ -4,11 +4,13 @@ import com.goodbook.book.model.UserDto;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserDao extends CrudRepository<UserDto, Long> {
 
-    UserDto findByUsername(String username);
+    Optional<UserDto> findByEmail(String email);
 
-    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
 
 }

@@ -22,8 +22,8 @@
                     <form class="col s12" method="post" th:action="@{/login}">
 
                         <div class='input-field col s12 '>
-                            <input class='validate' type='text' name='username' id='username' />
-                            <label>Enter your username</label>
+                            <input class='validate' type='text' name='username' id='email' />
+                            <label>Enter your email</label>
                         </div>
                         <div class='input-field col s12'>
                             <input class='validate' type='password' name='password' id='password' />
@@ -34,7 +34,7 @@
                         </div>
                     </form>
                     <div class='row center '>
-                        <a name='link_reg' href="/registration" class='col s12 btn btn-large waves-effect grey'>Registration</a>
+                        <a name='link_reg' href="/api/registration" class='col s12 btn btn-large waves-effect grey'>Registration</a>
                     </div>
                 </div>
 

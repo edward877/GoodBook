@@ -1,13 +1,11 @@
 package com.goodbook.book.model;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -26,19 +24,23 @@ public class CommentDto implements Serializable {
     Long id;
 
     @Column(nullable = false)
-    Date date;
+    String commentBody;
+
+    @Column(nullable = false)
+    LocalDateTime date;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @Getter(AccessLevel.PRIVATE)
     @JoinColumn(name = "user_id", nullable = false)
     UserDto user;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @Getter(AccessLevel.PRIVATE)
     @JoinColumn(name = "book_id", nullable = false)
     BookDto book;
 
-    public CommentDto(Date date, UserDto user, BookDto book) {
-        this.date = date;
-        this.user = user;
-        this.book = book;
+    public String getUser() {
+        return user.getEmail();
     }
+
 }
