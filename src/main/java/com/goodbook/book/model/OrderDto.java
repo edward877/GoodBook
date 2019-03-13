@@ -1,9 +1,6 @@
 package com.goodbook.book.model;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
@@ -28,19 +25,30 @@ public class OrderDto implements Serializable {
     @Column(name = "sum", nullable = false)
     double sum;
 
-    @Column(name = "status", nullable = false)
-    String status;
+    @Column(name = "isPaid", nullable = false)
+    boolean isPaid = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "email", nullable = false)
+    @EqualsAndHashCode.Exclude @ToString.Exclude
+    @Getter(AccessLevel.PRIVATE)
     UserDto user;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+//    @EqualsAndHashCode.Exclude @ToString.Exclude
+//    @Getter(AccessLevel.PRIVATE)
     List<OrderBookDto> orderBooks;
 
-    public OrderDto(double sum, String status, UserDto  user) {
-        this.sum = sum;
-        this.status = status;
+    public void plusSumToOrder(double sumForOneBook) {
+        sum += sumForOneBook;
+    }
+
+    public OrderDto(UserDto user) {
+        sum = 0;
         this.user = user;
     }
+
+//    public List<OrderBookDto> _getOrderBooks() {
+//        return orderBooks;
+//    }
 }

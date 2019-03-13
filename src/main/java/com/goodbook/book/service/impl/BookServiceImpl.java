@@ -25,7 +25,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Map<String, Object> findOneById(int id) throws NullPointerException {
-        Map<String, Object> map = new HashMap<>(1);
+        Map<String, Object> map = new HashMap<>();
         Optional<BookDto> book = bookDao.findById(id);
         if (book.isPresent()){
             map.put("Book", book.get());
@@ -39,11 +39,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Map<String, Object> addBook(BookDto bookDto) {
         Map<String, Object> map = new HashMap<>(1);
-        if (bookDao.save(bookDto) != null) {
-            map.put("success", true);
-        } else {
-            map.put("error", "Imposible save book");
-        }
+        map.put("success", bookDao.save(bookDto) != null);
         return map;
     }
 

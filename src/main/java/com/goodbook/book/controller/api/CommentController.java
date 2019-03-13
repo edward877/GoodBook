@@ -27,7 +27,6 @@ public class CommentController {
     @Autowired
     private UserService userService;
 
-////TODO добавить книгу по айди
     @PostMapping("comment")
     public  Map comment(@ModelAttribute CommentDto commentDto, int bookId) {
         commentDto.setDate(LocalDateTime.now());

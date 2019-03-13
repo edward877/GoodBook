@@ -52,7 +52,7 @@ public class UserDto implements Serializable {
     @Getter(AccessLevel.PRIVATE)
     transient CardDto card = new CardDto();
 
-    public String getSecretPassword() {
+    public String _getPassword() {
         return password;
     }
 }

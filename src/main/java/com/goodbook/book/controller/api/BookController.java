@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/api/books/")
+@RequestMapping(value = "/api/")
 public class BookController {
 
     private final BookService bookService;
@@ -50,17 +50,17 @@ public class BookController {
         return bookService.findAllBook(Integer.parseInt(page), Integer.parseInt(count), direction, sortProperty);
     }
 
-    @GetMapping("book/{bookId}")
+    @GetMapping("books/book/{bookId}")
     public Map book(@PathVariable("bookId") String bookId) {
         return bookService.findOneById(Integer.parseInt(bookId));
     }
 
-    @PostMapping("admin/book")
+    @PostMapping("admin/books/book")
     public Map book(@ModelAttribute BookDto bookDto) {
         return bookService.addBook(bookDto);
     }
 
-    @PostMapping("admin/book/{bookId}")
+    @PostMapping("admin/books/book/{bookId}")
     public Map bookUpdate(@PathVariable("bookId") String bookId, @ModelAttribute BookDto bookDto) {
         bookDto.setId(Integer.parseInt(bookId));
         return bookService.addBook(bookDto);

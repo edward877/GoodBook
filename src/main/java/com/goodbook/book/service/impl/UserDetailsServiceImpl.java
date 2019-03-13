@@ -29,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         UserDetails user = new User(
                 userDto.get().getEmail(),
-                userDto.get().getSecretPassword(),
+                userDto.get()._getPassword(),
                 getAuthorities(userDto.get().getRole()));
         return user;
     }

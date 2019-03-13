@@ -1,9 +1,6 @@
 package com.goodbook.book.model;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
@@ -24,16 +21,22 @@ public class OrderBookDto  implements Serializable {
     @Setter(AccessLevel.NONE)
     Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(nullable = false)
+    int countBook;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id", nullable = false)
     BookDto book;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id", nullable = false)
+    @EqualsAndHashCode.Exclude @ToString.Exclude
+    @Getter(AccessLevel.PRIVATE)
     OrderDto order;
 
-    public OrderBookDto(BookDto book, OrderDto order) {
+    public OrderBookDto(BookDto book, OrderDto order, int countBook) {
         this.book = book;
         this.order = order;
+        this.countBook = countBook;
     }
 }

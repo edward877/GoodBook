@@ -1,6 +1,7 @@
 package com.goodbook.book.service.interfaces;
 
 import com.goodbook.book.model.BookDto;
+import com.goodbook.book.model.Enum.BookCategory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -18,4 +19,7 @@ public interface BookService {
 
     Map<String, Object> findAllBook(int page, int countInPage, String direction, String property);
 
+    static BookCategory[] categories() {
+        return BookCategory.values();
+    }
 }

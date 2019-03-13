@@ -29,8 +29,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registration(UserDto userDto) throws Exception{
         if (!userDao.existsByEmail(userDto.getEmail())){
-            validPassword(userDto.getSecretPassword());
-            userDto.setPassword(passwordEncoder.encode(userDto.getSecretPassword()));
+            validPassword(userDto._getPassword());
+            userDto.setPassword(passwordEncoder.encode(userDto._getPassword()));
             userDao.save(userDto);
         } else {
             throw new SQLException("Username already exist");

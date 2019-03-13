@@ -11,11 +11,11 @@
 <body>
 
 <header th:include="fragments/header :: header"></header>
-<aside th:fragment="aside">
-    <div class="collection left col 5"
-         th:each="bookCategory : ${BookCategories}"">
-        <a href="#!" class="collection-item" th:text="${bookCategory}"></a>
-    </div>
+<aside th:include="fragments/aside" :: aside>
+    <!--<div class="collection left col 5"-->
+         <!--th:each="bookCategory : ${BookCategories}"">-->
+        <!--<a href="#!" class="collection-item" th:text="${bookCategory}"></a>-->
+    <!--</div>-->
 </aside>
 <main class="center">
     <div class="container">
