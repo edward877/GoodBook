@@ -5,6 +5,7 @@ public enum BookCategory {
     NOVEL("Новела"),
     ADVENTURE("Приключения"),
     HORROR("Ужасы"),
+    EDUCATION("Образование"),
     COMEDY("Комедия");
 
     String name;
@@ -13,4 +14,7 @@ public enum BookCategory {
         this.name = name;
     }
 
+    public String getCategoryName() {
+        return name;
+    }
 }

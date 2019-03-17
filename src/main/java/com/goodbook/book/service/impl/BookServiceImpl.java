@@ -49,7 +49,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Map<String, Object> findAllBook(int page, int countInPage, String direction, String property) {
+    public Map<String, Object> findAllBook(int page, int countInPage, String direction, String property, String category) {
         Map<String, Object> map = new HashMap<>(4);
 
         if (countInPage > 50) {
@@ -64,20 +64,26 @@ public class BookServiceImpl implements BookService {
 
         Sort sort =  Sort.by(Sort.Direction.fromString(direction), property);
         Pageable pageable = PageRequest.of(page-1, countInPage, sort);
+        Page pageList;
 
-        Page pageList =  bookDao.findAll(pageable);
+        if (category == "" || category == null){
+            pageList =  bookDao.findAll(pageable);
+        } else {
+            pageList =  bookDao.findAllByCategory(pageable, BookCategory.valueOf(category));
+        }
+
         List<BookDto> books = pageList.getContent();
         int maxBookPage = pageList.getTotalPages();
 
 
-        if (books != null) {
+//        if (books.size() > 0) {
             map.put("MaxPage", maxBookPage);
             map.put("Books", books);
             map.put("Count", books.size());
             map.put("Page", page);
-        } else {
-            map.put("Error", "Книги не найдены");
-        }
+//        } else {
+//            map.put("Error", "Книги не найдены");
+//        }
 
         return  map;
     }

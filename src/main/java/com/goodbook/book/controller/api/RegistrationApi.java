@@ -12,13 +12,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/")
-//@Controller
-public class AuthController {
+public class RegistrationApi {
 
     private final UserService userService;
 
     @Autowired
-    public AuthController(UserService userService) {
+    public RegistrationApi(UserService userService) {
         this.userService = userService;
     }
 
@@ -30,22 +29,9 @@ public class AuthController {
             userService.registration(userDto);
             map.put("User",userDto);
         }catch (Exception ex) {
-            map.put("Error", ex.getMessage());
+            map.put("error", ex.getMessage());
         }
         return map;
     }
 
-    @PostMapping("login/success")
-    public Map loginSuccess() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("success", true);
-        return map;
-    }
-
-    @PostMapping("login/failure")
-    public Map loginFailure() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("success", false);
-        return map;
-    }
 }

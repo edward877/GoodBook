@@ -18,7 +18,7 @@ import java.util.Optional;
 @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 @RestController
 @RequestMapping(value = "/api/comments/")
-public class CommentController {
+public class CommentApi {
 
 
     @Autowired

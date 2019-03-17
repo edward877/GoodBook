@@ -9,7 +9,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/")
-public class OrderController {
+public class OrderApi {
 
     @Autowired
     private OrderService orderService;

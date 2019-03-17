@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Корзина</title>
+    <link rel="stylesheet" th:href="@{/css/materialize.css}" href="../../css/materialize.css" />
+    <link rel="stylesheet" th:href="@{/css/footer.css}" href="../../css/footer.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" th:href="@{/css/index.css}" href="../../css/index.css" />
+
+    <script>
+        function changeItemInCard(bookId, isAdd) {
+            var  url = '/api/card/' + (isAdd ? 'add' : 'minus') + '?id='+bookId
+            var http = new XMLHttpRequest()
+            http.open('POST', url)
+            http.setRequestHeader('Content-type', 'application/json')
+            http.send() // Make sure to stringify
+            http.onload = function() {
+                location.reload(true)
+            }
+        }
+        function addOrder() {
+            var  url = '/order/'
+            var http = new XMLHttpRequest()
+            http.open('POST', url)
+            http.setRequestHeader('Content-type', 'application/json')
+            http.send() // Make sure to stringify
+            http.onload = function() {
+                location.href = "/order/";
+            }
+        }
+    </script>
+</head>
+<body>
+
+<header th:include="fragments/header :: header"/>
+<aside th:include="fragments/aside :: aside"/>
+<main>
+    <div class="container row">
+
+<div th:if="${Books}">
+    <a class="right waves-effect waves-light btn-large black" onclick="addOrder()">
+        <i class="large material-icons ">playlist_add</i>
+    </a>
+    <h5 class="right" th:text="'Cумма ' + ${CardPrice} + '&#8195;'"/>
+</div>
+<h2 class="header center">Корзина</h2>
+<!--/*@thymesVar id="error" type="java.lang.String"*/-->
+<div сlass="center" th:if="${error}">
+    <h3 th:text="${error}">Error</h3>
+</div>
+<div id="card-container" >
+<!--/*@thymesVar id="book" type="com.goodbook.book.model.CardItemDto"*/-->
+<div th:each="book : ${Books}">
+    <div class="col s12 m12 l5 offset-l1" style="height: 270px" >
+        <div class="card horizontal"  style="height: 220px;">
+            <div class="card-image">
+                <img  src="#" th:src="${book.getUrlImage()}" alt="" height="220px;"/>
+            </div>
+            <div class="card-stacked">
+                <div class="card-content">
+                    <a th:href="@{'/books/book/' + ${book.getId()}}">
+                        <span class="card-title grey-text text-darken-4" th:text="${book.getName()}"></span>
+                    </a>
+                    <p th:text="${book.getAuthor()}" class="card-subtitle grey-text text-darken-2"/>
+                    <div class="row card-row">
+                        <span class="text-darken-2 card-info">
+                            <i class="small material-icons">format_list_numbered</i>
+                            <p th:text="${book.getCountInCard()}"/>
+                        </span>
+                    </div>
+                    <div class="row card-row">
+                        <div class="center">
+                            <span class="" th:text=" 'Цена: ' + ${book.getPrice()} + ' руб  '"></span>
+                        </div>
+
+                        <a class="left waves-effect waves-light btn red" th:onclick="'changeItemInCard(\'' +${book.getId()} +'\', false)'">
+                            <i class="large material-icons ">remove</i>
+                        </a>
+                        <a class="right waves-effect waves-light btn small red" th:onclick="'changeItemInCard(\'' +${book.getId()} +'\', true)'">
+                            <i class="large material-icons ">add_circle_outline</i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+    </div>
+</main>
+<footer th:include="fragments/footer :: footer"/>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/js/materialize.js}" src="../../js/materialize.js"></script>
+</body>
+</html>

@@ -15,12 +15,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/")
-public class BookController {
+public class BookApi {
 
     private final BookService bookService;
 
     @Autowired
-    public BookController(BookService bookService) {
+    public BookApi(BookService bookService) {
         this.bookService = bookService;
     }
 
@@ -32,27 +32,27 @@ public class BookController {
      * @param sortProperty - свойство, по которому происхожит сортировка, по умолчанию - id
      * @return map - MaxPage, Books - найденные книги, Count, Page
      */
-    @GetMapping
-    public Map<String, Object> booksPage(String page, String count, String direction, String sortProperty,
-                                         String... filterProperties) {
-        if( page == null || page.trim().isEmpty()) {
-            page = "1";
-        }
-        if (count == null || count.trim().isEmpty() || !count.matches("[0-9]*")){
-            count = "10";
-        }
+    @GetMapping("books/")
+    public Map<String, Object> booksPage(Integer page, Integer count, String direction, String sortProperty,
+                                         String category) {
         if (direction == null || direction.trim().isEmpty()) {
             direction = Sort.Direction.DESC.name();
         }
         if (sortProperty == null || sortProperty.trim().isEmpty()) {
             sortProperty = "id";
         }
-        return bookService.findAllBook(Integer.parseInt(page), Integer.parseInt(count), direction, sortProperty);
+        if(page == null || page == 0) {
+            page = 1;
+        }
+        if(count == null || count == 0) {
+            count = 1;
+        }
+        return bookService.findAllBook(page, count, direction, sortProperty, category);
     }
 
     @GetMapping("books/book/{bookId}")
-    public Map book(@PathVariable("bookId") String bookId) {
-        return bookService.findOneById(Integer.parseInt(bookId));
+    public Map book(@PathVariable("bookId") int bookId) {
+        return bookService.findOneById(bookId);
     }
 
     @PostMapping("admin/books/book")

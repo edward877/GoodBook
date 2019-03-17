@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Registration</title>
+    <title>Регистрация</title>
     <link rel="stylesheet" th:href="@{/css/materialize.css}" href="../../css/materialize.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -12,26 +12,20 @@
 <body>
 
 <header th:include="fragments/header :: header"></header>
-
+<aside th:include="fragments/aside :: aside"/>
 
 <main class="valign-wrapper">
     <div class="container ">
         <div class='row center'>
-            <div th:if="${Error}">
-                <h5 th:text="${Error}"/>
-            </div>
-            <div th:if="${User}">
-                <h5 th:text="${User.getEmail} is registred. Please log in"/>
-            </div>
-            <div class=" col l4 s12  offset-l4">
+            <div class=" col l6 s12  offset-l3">
                 <h5 class="grey-text">Registration</h5>
-                <br />
                 <div class="z-depth-1 grey lighten-4" style="display: inline-block; padding:  0px 48px; border: 1px solid #EEE;">
 
                     <form class="col s12" method="post" th:action="@{/registration}">
+                        <p/>
                         <div class='input-field col s12 '>
-                            <input class='validate' type='text' name='username' id='email' />
-                            <label>Username</label>
+                            <input class='validate' type='text' name='email' id='email' />
+                            <label>Email</label>
                         </div>
                         <div class='input-field col s12'>
                             <input class='validate' type='password' name='password' id='password' />
@@ -41,6 +35,10 @@
                             <button type='submit' name='btn_registration' class='col s12 btn btn-large waves-effect grey'>Registration</button>
                         </div>
                     </form>
+                </div>
+                <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+                <div th:if="${error}">
+                    <p th:text="${error}">Error</p>
                 </div>
             </div>
         </div>

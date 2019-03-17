@@ -4,19 +4,25 @@
 </head>
 <body>
 <header>
-    <nav class="grey">
+    <nav class="red">
         <div class="nav-wrapper">
-            <a class="brand-logo center" th:href="@{/}">
-                <img id="cupcake" class="responsive-img" width="62" th:src="@{/images/cupcake.png}"/>
+            <a class="brand-logo center" style="font-size: 300%" th:href="@{/}">
+                GoodBook
             </a>
-            <ul id="name" class="left col 2">
-                <li>[[${#httpServletRequest.remoteUser}]]</li>
-            </ul>
             <ul id="nav-mobile" class="right">
+                <li><a href="/card/"><i class="material-icons">shopping_cart</i></a></li>
                 <li th:if="${#httpServletRequest.remoteUser}">
-                    <form th:action="@{/logout}" method="get">
-                        <input type="submit" value="Выйти" class="btn-large btn-flat white-text" />
-                    </form>
+                    <a href="/logout" style="font-size: 150%">Выйти</a>
+                </li>
+                <li th:unless="${#httpServletRequest.remoteUser}">
+                    <a href="/login" style="font-size: 150%">Войти</a>
+                </li>
+            </ul>
+            <ul id="nav-left" class="left">
+                <li><a href="/" style="font-size: 150%">Главная</a></li>
+                <li><a href="/books" style="font-size: 150%">Книги</a></li>
+                <li th:if="${#httpServletRequest.remoteUser}">
+                    <a href="/order/" style="font-size: 150%">Заказы</a>
                 </li>
             </ul>
         </div>

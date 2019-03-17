@@ -48,7 +48,4 @@ public class OrderDto implements Serializable {
         this.user = user;
     }
 
-//    public List<OrderBookDto> _getOrderBooks() {
-//        return orderBooks;
-//    }
 }

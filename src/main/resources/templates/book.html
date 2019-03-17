@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--/*@thymesVar id="Book" type="com.goodbook.book.model.BookDto"*/-->
+    <title th:text="${Book.getName()}"></title>
+    <link rel="stylesheet" th:href="@{/css/materialize.css}" href="../../css/materialize.css" />
+    <!--<link rel="stylesheet" th:href="@{/css/footer.css}" href="../../css/footer.css" />-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" th:href="@{/css/index.css}" href="../../css/index.css" />
+
+    <script>
+        function addItemToCard(bookId) {
+            $.ajax({
+                url : '/api/card/add?id='+bookId,
+                datatype : 'json',
+                type : "post",
+                contentType : "application/json",
+                success : function(data) {
+                    console.log(data);
+                }
+            });
+        }
+        function addComment() {
+            var parts = $(location).attr('href').split('/');
+            var bookIid = parts.pop();
+            if(!bookIid) {
+                bookIid = parts.pop();
+            }
+            var message = $('#comment').val();
+            if (message) {
+                var url = '/books/book/comment?commentBody=' + message + '&bookId=' + bookIid
+                var http = new XMLHttpRequest()
+                http.open('POST', url)
+                http.setRequestHeader('Content-type', 'application/json')
+                http.send() // Make sure to stringify
+                http.onload = function() {
+                    location.href = location.href;
+                }
+                $('#comment').val('');
+            }
+        }
+    </script>
+</head>
+<body>
+
+<header th:include="fragments/header :: header"/>
+
+<main>
+    <div class="container row">
+        <!--/*@thymesVar id="Book" type="com.goodbook.book.model.BookDto"*/-->
+        <h4 class="header center" th:text="${Book.getName()}"></h4>
+        <div class="col s12 ">
+            <div class="card">
+                <div class="center">
+                    <img th:src="${Book.getUrlImage()}" height="250px;">
+                    <h5 class="card-row text-accent-2" th:text="'Цена: ' + ${Book.getPrice()}"></h5>
+                </div>
+                <div class="card-content">
+                    <h5 class="card-row" th:text="'Автор .................... ' + ${Book.getAuthor()}"></h5>
+                    <h5 class="card-row" th:text="'Год издания ........ ' + ${Book.getYear()}"></h5>
+                    <h5 class="card-row" th:text="'Категория ............ ' + ${Book.getCategory().getCategoryName()}"></h5>
+                    <h5 class="card-row" th:text="'В наличии ...........  ' + ${Book.getCount()}"></h5>
+                    <p th:text="${Book.getDescription()}"></p>
+                    <br/>
+                </div>
+                <div class="card-action">
+                    <div th:if="${#httpServletRequest.remoteUser}"  class="">
+                        <textarea id="comment" name="comment" rows="5" cols="33"  style="height: 150px;"></textarea>
+                        <a class="waves-effect waves-light btn red" th:onclick="addComment()">
+                            Отправить
+                        </a>
+                    </div>
+                    <br/>
+                    <!--/*@thymesVar id="comment" type="com.goodbook.book.model.CommentDto"*/-->
+                    <div th:each="comment : ${Comments}" class="collection">
+                        <div class="collection-item">
+                            <h5 th:text="${comment.getUser()}"></h5>
+                            <p th:text="${comment.getCommentBody()}"></p>
+                            <p th:text="${comment.getDate().toLocalDate()} + ' '
+                                + ${comment.getDate().getHour()} + ':' + ${comment.getDate().getMinute()}" class="right"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/js/materialize.js}" src="../../js/materialize.js"></script>
+</body>
+</html>

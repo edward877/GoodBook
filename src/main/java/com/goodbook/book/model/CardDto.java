@@ -28,6 +28,13 @@ public class CardDto {
         card.put(id, count);
     }
 
+    public int getCountOneBookInCard(int id){
+        if (card.containsKey(id)) {
+            return card.get(id);
+        }
+        return 0;
+    }
+
     public boolean removeBook(int id) {
         if (card.containsKey(id)) {
             card.remove(id);

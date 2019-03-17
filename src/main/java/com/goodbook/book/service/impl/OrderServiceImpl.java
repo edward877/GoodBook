@@ -96,11 +96,7 @@ public class OrderServiceImpl implements OrderService {
         try {
             UserDto user = userService.getUser().get();
             List<OrderDto> orders = orderDao.findAllByUser(user);
-            if (orders.size() == 0) {
-                map.put("success", false);
-                return map;
-            }
-            orders.forEach(orderDto -> map.put("order", orderDto));
+            map.put("Orders", orders);
         } catch (Exception e) {
             map.put("success", false);
         }

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Книги</title>
+    <link rel="stylesheet" th:href="@{/css/materialize.css}" href="../../css/materialize.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" th:href="@{/css/index.css}" href="../../css/index.css" />
+
+    <script>
+
+        function addItemToCard(bookId) {
+            $.ajax({
+                url : '/api/card/add?id='+bookId,
+                datatype : 'json',
+                type : "post",
+                contentType : "application/json",
+                success : function(data) {
+                    console.log(data);
+                }
+            });
+        }
+
+        function sendPage(page) {
+            $("#page").val(page);
+            $("#form").submit();
+        }
+
+        function sendSort() {
+            var properties = document.getElementById("dropdownProperty");
+            var property = properties.options[properties.selectedIndex].id;
+            var properties1 = document.getElementById("dropdownDirection");
+            var direction = properties1.options[properties1.selectedIndex].id;
+            $("#sortProperty").val(property);
+            $("#direction").val(direction);
+            $("#form").submit();
+        }
+
+        function sendFilter() {
+            var properties = document.getElementById("dropdownCategory");
+            var category = properties.options[properties.selectedIndex].id;
+            $("#category").val(category);
+            $("#form").submit();
+        }
+
+    </script>
+</head>
+<body>
+
+<header th:include="fragments/header :: header"/>
+
+<main>
+    <div class="row">
+
+        <div class="col s2">
+            <br/>
+            <br/>
+            <form action="/books" method="GET" id="form">
+                <div th:name="sort">
+                    <h4 class="center">Сортировка</h4>
+                    <select id='dropdownProperty' class="col s12">
+                        <option id="id">По дате добавления</option>
+                        <option id="price">По цене</option>
+                        <option id="year">По году выпуска</option>
+                        <option id="name">По наименоваю</option>
+                        <option id="author">По автору</option>
+                    </select>
+                    <select id='dropdownDirection' class="col s12">
+                        <option id="desc">По убывания</option>
+                        <option id="asc">По возрастанию</option>
+                    </select>
+                    <a class="col s12  waves-effect waves-light btn red" th:onclick="sendSort()">
+                        Сортировать
+                    </a>
+                </div>
+                <div class="row"></div>
+                <input hidden id="sortProperty" name="sortProperty"
+                       th:value="${#httpServletRequest.getParameter('sortProperty')}"/>
+                <input hidden id="direction" name="direction"
+                       th:value="${#httpServletRequest.getParameter('direction')}"/>
+                <input hidden id="category" name="category"
+                        th:value="${#httpServletRequest.getParameter('category')}"/>
+                <input hidden id="page" name="page"
+                       th:value="${#httpServletRequest.getParameter('page')}"/>
+            </form>
+            <div th:name="filter">
+                <h4 class="center">Фильтрация</h4>
+                <select id='dropdownCategory' class="col s12">
+                    <option id="DETECTIVE">Детектив</option>
+                    <option id="NOVEL">Новела</option>
+                    <option id="ADVENTURE">Приключения</option>
+                    <option id="HORROR">Ужасы</option>
+                    <option id="COMEDY">Комедия</option>
+                    <option id="EDUCATION">Образование</option>
+                </select>
+                <a class="col s12 waves-effect waves-light btn red" onclick="sendFilter()">Фильтровать</a>
+            </div>
+        </div>
+
+        <div class="col s10">
+            <div id="card-container" >
+                <!--/*@thymesVar id="book" type="com.goodbook.book.model.BookDto"*/-->
+                <div th:each="book : ${Books}">
+                    <div class="col s12 m12 l4 offset-l1" style="height: 300px" >
+                        <div class="card horizontal"  style="height: 250px;">
+                            <div class="card-image">
+                                <img  src="#" th:src="${book.getUrlImage()}" alt="" height="250px;"/>
+                            </div>
+                            <div class="card-stacked">
+                                <div class="card-content">
+                                    <a th:href="@{'/books/book/' + ${book.getId()}}">
+                                        <span class="card-title grey-text text-darken-4" th:text="${book.getName()}"></span>
+                                    </a>
+                                    <p th:text="${book.getAuthor()}" class="card-subtitle grey-text text-darken-2"/>
+                                    <div class="row card-row">
+                                            <span class="text-darken-2 card-info">
+                                                <i class="small material-icons">sort</i>
+                                                <p th:text="${book.getCategory().getCategoryName()}"/>
+                                            </span>
+                                    </div>
+                                    <div class="row card-row">
+                                        <span class="left" th:text="'Цена: ' + ${book.getPrice()} + ' руб  '"></span>
+                                        <a class="right waves-effect waves-light btn red" th:onclick="'addItemToCard(\'' +${book.getId()} +'\')'">
+                                            <i class="large material-icons ">add_shopping_cart</i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col offset-s3 ">
+            <ul class="pagination">
+                <form action="/books" method="GET" id="formPage">
+                    <div th:unless="${MaxPage == 0}">
+
+                        <li th:if="${Page == 1}" class="disabled">
+                            <i class="material-icons">chevron_left</i>
+                        </li>
+                        <li th:unless="${Page == 1}" class="waves-effect">
+                            <a th:onclick="'sendPage(\'' + ${Page - 1} +'\')'">
+                                <i class="material-icons">chevron_left</i>
+                            </a>
+                        </li>
+
+                        <th:block th:each="i: ${#numbers.sequence(1, MaxPage)}">
+                            <li th:if="${Page == i}" class="active"><a th:text="${i}"></a></li>
+                            <li th:unless="${Page == i}" class="waves-effect">
+                                <a th:onclick="'sendPage(\'' +${i} +'\')'" th:text="${i}"></a>
+                            </li>
+                        </th:block>
+
+
+                        <li th:if="${Page == MaxPage}" class="disabled">
+                            <i class="material-icons">chevron_right</i>
+                        </li>
+                        <li th:unless="${Page == MaxPage}" class="waves-effect">
+                            <a th:onclick="'sendPage(\'' + ${Page + 1} +'\')'">
+                                <i class="material-icons">chevron_right</i>
+                            </a>
+                        </li>
+                    </div>
+                </form>
+            </ul>
+        </div>
+    </div>
+</main>
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" th:src="@{/js/materialize.js}" src="../../js/materialize.js"></script>
+</body>
+</html>

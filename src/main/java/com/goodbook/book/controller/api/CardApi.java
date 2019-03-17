@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/api/user/card/")
-public class CardController {
+@RequestMapping(value = "/api/card/")
+public class CardApi {
 
     @Autowired
     private CardService cardService;
 
     @PostMapping("add")
-    public Map add(String id) {
-        return cardService.add(Integer.parseInt(id));
+    public Map add(int id) {
+        return cardService.add(id);
     }
 
     @PostMapping("delete")

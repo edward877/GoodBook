@@ -10,17 +10,17 @@
 <body>
 
 <header th:include="fragments/header :: header"></header>
+<aside th:include="fragments/aside :: aside"/>
 
 <main class="valign-wrapper">
     <div class="container ">
         <div class='row center'>
-            <div class=" col l4 s12  offset-2">
+            <div class=" col l6 s12  offset-l3">
                 <h5 class="grey-text">Please, login into your account</h5>
-                <br />
                 <div class="z-depth-1 grey lighten-4" style="display: inline-block; padding:  0px 48px; border: 1px solid #EEE;">
 
                     <form class="col s12" method="post" th:action="@{/login}">
-
+                        <p/>
                         <div class='input-field col s12 '>
                             <input class='validate' type='text' name='email' id='email' />
                             <label>Enter your email</label>
@@ -33,13 +33,15 @@
                             <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect grey'>Login</button>
                         </div>
                     </form>
+                    <p/>
+                    <a name='link_reg' href="/registration" class='col s12 btn btn-large waves-effect grey'>Registration</a>
+
                     <div class='row center '>
-                        <a name='link_reg' href="/api/registration" class='col s12 btn btn-large waves-effect grey'>Registration</a>
                     </div>
                 </div>
 
                 <div th:if="${#httpServletRequest.getParameter('error')}">
-                    Неправильный логин или пароль
+                    <p>Неправильный логин или пароль</p>
                 </div>
             </div>
         </div>
